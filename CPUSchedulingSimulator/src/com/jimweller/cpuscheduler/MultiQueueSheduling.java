@@ -7,7 +7,7 @@ package com.jimweller.cpuscheduler;
 
 import java.util.LinkedList;
 
-public class MultiQueueSheduling extends BaseSchedulingAlgorithm
+public class MultiQueueSheduling extends RoundRobinSchedulingAlgorithm
 implements OptionallyPreemptiveSchedulingAlgorithm
 {
 	//if canInterrupt is true, algorithm can be preemptive in that the moment a higher
