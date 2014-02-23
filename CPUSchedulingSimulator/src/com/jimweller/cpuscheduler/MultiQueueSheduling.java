@@ -10,13 +10,18 @@ import java.util.LinkedList;
 public class MultiQueueSheduling extends RoundRobinSchedulingAlgorithm
 implements OptionallyPreemptiveSchedulingAlgorithm
 {
+	//private int quantum (get quantum and set quantum already here)
+	
 	//if canInterrupt is true, algorithm can be preemptive in that the moment a higher
 	//level queue receives a process, lower level queue processes are put on hold
 	private boolean canInterrupt;
 	
-	private LinkedList<Process> queue1;
-	private LinkedList<Process> queue2;
-	private LinkedList<Process> queue3;
+	private LinkedList<Process> queue1; //round robin with quantum
+	private LinkedList<Process> queue2;// round robin with 2*quantum
+	private LinkedList<Process> queue3;// first come first serve
+	
+	private final long QUEUE3_HIGHEST_PRIORITY = 7;
+	private final long QUEUE2_HIGHEST_PRIORITY = 4;
 	
 	public boolean isPreemptive() {
 		
@@ -29,13 +34,26 @@ implements OptionallyPreemptiveSchedulingAlgorithm
 		canInterrupt = v;
 		
 	}
-
-	@Override
 	public void addJob(Process p) {
-		// TODO Auto-generated method stub
 		
 		//check p's priority
 		//add to appropriate queue
+		
+		if(p.priority < QUEUE3_HIGHEST_PRIORITY)
+		{
+			if(p.priority < QUEUE2_HIGHEST_PRIORITY)
+			{
+				//add to queue 1
+			}
+			else
+			{
+				//add to queue 2
+			}
+		}
+		else
+		{
+			//add to queue 3
+		}
 		
 	}
 
@@ -59,6 +77,18 @@ implements OptionallyPreemptiveSchedulingAlgorithm
 		// TODO Auto-generated method stub
 		
 		//check through the higher level queues first
+		
+		if(queue1.size() > 0)
+		{
+			//return queue 1 job and set method to queue1
+		}
+		
+		if(queue2.size() > 0)
+		{
+			//return queue 2 job and set scheduling method to queue 2
+		}
+		
+		//return queue 3 job
 		
 		return null;
 	}

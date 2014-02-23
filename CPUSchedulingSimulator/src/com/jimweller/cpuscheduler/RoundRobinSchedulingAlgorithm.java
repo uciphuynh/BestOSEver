@@ -15,7 +15,7 @@ public class RoundRobinSchedulingAlgorithm extends BaseSchedulingAlgorithm {
     /** the timeslice each process gets */
     private int quantum;
 
-    RoundRobinSchedulingAlgorithm() {
+    public RoundRobinSchedulingAlgorithm() {
     }
 
     /** Add the new job to the correct queue. */
