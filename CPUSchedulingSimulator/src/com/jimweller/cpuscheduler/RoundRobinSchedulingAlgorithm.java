@@ -13,7 +13,9 @@ import java.util.*;
 public class RoundRobinSchedulingAlgorithm extends BaseSchedulingAlgorithm {
 
     /** the timeslice each process gets */
-    private int quantum;
+    //needs to be protected so MultiQueue can use this...
+	protected int quantum;
+    protected LinkedList<Process> queue;
 
     public RoundRobinSchedulingAlgorithm() {
     }

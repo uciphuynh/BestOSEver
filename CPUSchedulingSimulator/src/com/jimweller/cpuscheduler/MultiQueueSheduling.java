@@ -16,12 +16,14 @@ implements OptionallyPreemptiveSchedulingAlgorithm
 	//level queue receives a process, lower level queue processes are put on hold
 	private boolean canInterrupt;
 	
-	private LinkedList<Process> queue1; //round robin with quantum
+	//private LinkedList<Process> queue1; //round robin with quantum (already provided with parent class)
+	//so queue1 = queue...
 	private LinkedList<Process> queue2;// round robin with 2*quantum
-	private LinkedList<Process> queue3;// first come first serve
+	private LinkedList<Process> queue3;// first come first serve (round robin with quantum of infinity)
 	
 	private final long QUEUE3_HIGHEST_PRIORITY = 7;
 	private final long QUEUE2_HIGHEST_PRIORITY = 4;
+	private final int INFINITE_QUANTUM = 100000;
 	
 	public boolean isPreemptive() {
 		
@@ -44,10 +46,21 @@ implements OptionallyPreemptiveSchedulingAlgorithm
 			if(p.priority < QUEUE2_HIGHEST_PRIORITY)
 			{
 				//add to queue 1
+				//and interrupt the current running process if the current running is not in
+				//queue 1 
+				
+				if(canInterrupt)
+				{
+					
+				}
 			}
 			else
 			{
 				//add to queue 2
+				if(canInterrupt)
+				{
+					
+				}
 			}
 		}
 		else
@@ -78,7 +91,7 @@ implements OptionallyPreemptiveSchedulingAlgorithm
 		
 		//check through the higher level queues first
 		
-		if(queue1.size() > 0)
+		if(queue.size() > 0)
 		{
 			//return queue 1 job and set method to queue1
 		}
