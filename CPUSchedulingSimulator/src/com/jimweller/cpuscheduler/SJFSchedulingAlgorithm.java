@@ -36,7 +36,7 @@ public class SJFSchedulingAlgorithm extends BaseSchedulingAlgorithm implements O
     		for (int i = 0; i < jobs.size(); i++) {
     			cur = jobs.get(i);
     			if (p.getInitBurstTime() < cur.getInitBurstTime()) {
-    				job.add (i, p);
+    				jobs.add (i, p);
     			}
     		}
     	}
@@ -63,7 +63,9 @@ public class SJFSchedulingAlgorithm extends BaseSchedulingAlgorithm implements O
     /** Returns the next process that should be run by the CPU, null if none available.*/
     public Process getNextJob(long currentTime) {
     	Process cur;
-    	for (int i = jobs.size() = 1; i >= 0; i--) {
+    	//Shannon... what are you trying to do here.... um... there was a = 1 after the jobs.size()
+    	// so not to sure...
+    	for (int i = jobs.size(); i >= 0; i--) {
     		if (cur.getBurstTime() == 0) {
     			removeJob(cur);
     		} else {
