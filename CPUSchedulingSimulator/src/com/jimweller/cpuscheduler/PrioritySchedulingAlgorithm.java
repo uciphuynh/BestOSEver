@@ -2,8 +2,8 @@
  * 
  * A single-queue priority scheduling algorithm.
  *
- * @author: Team XXXX: Phong Huynh (21837531), Rachel Chu (XXXXXXXX), Shannon Lewis (XXXXXXXX), Zachary Soohoo (XXXXXXXX)
- * Winter 2013
+ * @author: Team 32: Phong Huynh (21837531), Rachel Chu (41815538), Shannon Lewis (XXXXXXXX), Zachary Soohoo (XXXXXXXX)
+ * Winter 2014
  *
  */
 package com.jimweller.cpuscheduler;

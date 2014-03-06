@@ -128,6 +128,9 @@ public class CPUScheduler {
 				b = Long.parseLong(st.nextToken());
 				d = Long.parseLong(st.nextToken());
 				p = Long.parseLong(st.nextToken());
+				
+				//if doing memory constraint need to parse out the memory token
+				
 				proc = new Process(b, d, p);
 				allProcs.add(proc);
 			}

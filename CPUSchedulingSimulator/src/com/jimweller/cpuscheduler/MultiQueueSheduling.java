@@ -1,3 +1,8 @@
+/*
+ * @author: Group 32: Shannon Lewis, Zach Soohoo, Phong Huynh, Rachel Chu
+ * Winter 2014
+ */
+
 //a Multi-level queue algorithm where processes are sorted by priority
 // Priority 0-3 => Queue 1 (Round robin, quantum of 10 or selected)
 // Priority 4-6 => Queue 2 (Round robin, quantum of 2*Queue 1 quantum)
