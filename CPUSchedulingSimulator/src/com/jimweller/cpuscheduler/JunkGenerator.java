@@ -17,8 +17,8 @@ public class JunkGenerator {
 	    long burst = (long) (Math.random() * 99 + 1 );
 	    long delay = (long) (Math.random() * 50);
 	    long priority = (long) (Math.random() * 9);
-	    long memory = (long) (Math.random()*100);
-	    System.out.println(burst+"\t"+delay+"\t"+priority+"\t" + memory);
+	    //long memory = (long) (Math.random()*100);
+	    System.out.println(burst+"\t"+delay+"\t"+priority);
 	}
     }
 

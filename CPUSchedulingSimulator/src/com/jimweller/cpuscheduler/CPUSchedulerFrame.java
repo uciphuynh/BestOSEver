@@ -695,12 +695,6 @@ public class CPUSchedulerFrame extends JFrame implements ActionListener {
 	quantumField = new JTextField("10", 10);
 	quantumField.setToolTipText("Quantum");
 	startCB.setAlignmentX(Component.RIGHT_ALIGNMENT);
-	
-	/*
-	 * memoryField = new JTextField("100",10);
-	 * memoryFiled.setToolTipText("Memory in System")
-	 * startCB.setAlignmentX(Component.RIGHT_ALIGNMENT);
-	 * */
     }
 
     /**
