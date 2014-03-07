@@ -1,7 +1,13 @@
-use Math::Random::OO::Normal;
-print("Hi!!! This is Perl \n");
+#File generator to be used for the results portion of our OS project according to specs
+#
+# authors: Phong Huynh, Shannon Lewis, Zach Soohoo, Rachel Chu
+# Group #: 32
+# Winter 2014
 
-#This generator returns decimals...
+use Math::Random::OO::Normal; #generates random numbers based on normal distribution in decimal
+use POSIX; #generates rounded numbers (using ceil and floor)
+
+#print("Hi!!! This is Perl \n");
 
 #practice use of the generator
 #$firstGenerator = Math::Random::OO::Normal -> new(5);
@@ -9,70 +15,106 @@ print("Hi!!! This is Perl \n");
 #print("Value is $firstValue");
 
 #open the file to write to. File is our file handle
-#hopefully its empty... otherwise I'm overwritting anything in it...
+#writes following the existing data (so make sure fed file is empty)
 
-open(File, "fileNameHere") || die "Can't open the file");
+#want to be able to call it like perl RandomFileGenerator.pl filename muBurst muPrio muMem numOfEntries
+#each time you run you have to fill in all of the stuff
+
+if($#ARGV+1 != 5)
+{
+    die "Not valid program call! Need filename, average burst, average priority
+    , average memory needed, and number of entries";
+}
+
+$fileName = @ARGV[0];
+$muB = @ARGV[1];
+$muP = @ARGV[2];
+$muM = @ARGV[3];
+$numOfE = @ARGV[4];
+
+open(File, ">>$fileName") || die "Can't open the file";
 
 sub buildFile
 {    
     @params = @_;
     
    #let range be 0 - 2*$mu where $mu is the mean value we want
-    #and since we want to divide it into 6 parts...       
+    #and since we want to divide it into 6 parts
+   #range by default would be (2*mu)/3 but if part of the range
+   #falls out of the range given below we reroll   
     
-    if($#params < 4)
+    if($#params+1 < 4)
     {
        print("Incorrect Number Of Arguements!");
+       print("$#params");
     }
     else
     {
     
+    #CPU burst times between 1 and 99 (normalized around mu)
+    #Delay times between 0 and 69
+    #Priorities between 0 and 9 (normalized around mu)
+    
     $numOfLines = @params[3];
     
-    $muEntranceTime = @params[0];
-    $entranceSTD = $muEntranceTime/3;
-    $muBurstTime = @params[1];
+    $muBurstTime = @params[0];
     $burstSTD = $muBurstTime/3;
-    $muPriority = @params[2];
+    $muPriority = @params[1];
     $prioritySTD = $muPriority/3;
+    $muMemoryNeed = @params[2];
+    $memorySTD = $muMemoryNeed/3;
     
-    $entryGenerator = Math::Random::OO::Normal->new($muEntranceTime, $entranceSTD);
-    $burstTimeGenerator = Math::Random::OO:Normal->new($muBurstTime, $burstSTD);
-    $priorityGenerator = Math::Random::OO:Normal->new($muPriority, $prioritySTD);
+    $burstTimeGenerator = Math::Random::OO::Normal->new($muBurstTime, $burstSTD);
+    $priorityGenerator = Math::Random::OO::Normal->new($muPriority, $prioritySTD);
+    $memoryNeedGenerator = Math::Random::OO::Normal->new($muMemoryNeed, $memorySTD);
+    $burstTime = 0;
+    $priority = 9;
+
     
-    for($i = 0; i < $numOfLines; i++)
+    for($i = 0; $i < $numOfLines; $i++)
     {
-        $entryTime = $entryGenerator->next();
-        $burstTime = $burstTimeGenerator ->next();
-        $priority = $priorityGenerator->next();
+        if($i >= 1)
+        {
+            print File ("\n");
+        }
+        $validBurst = false;
+        $validPriority = false;
         
-        print File "$entryTime $burstTime $priority \n";
+        $entryTime = int(rand(70)); #generates a value within 0-69 automatically
+        
+        do
+        {
+            $burstTime = ceil($burstTimeGenerator->next());
+            
+            if($burstTime > 0 && $burstTime < 100)
+            {
+                $validBurst = true;
+            }
+        
+        } while(!$validBurst);
+        
+        do
+        {
+            $priority = ceil($burstTimeGenerator->next());
+            
+            if($priority > 0 && $priority < 9)
+            {
+                $validPriority = true;
+            }
+            
+        }while(!$validPriority);
+        
+        #for memory we don't need to concern ourselves with the limit of memory. it can even be 0...
+        $memory = ceil($memoryNeedGenerator->next());
+        
+        print File ("$entryTime $burstTime $priority $memory");
+        #print "$entryTime $burstTime $priority\n";
     }
     
     }
 }
 
-buildFile($first, $second, $third, $four);
+#buildFile(muBurst, muPriority, muMem, numOfEntries)
+buildFile($muB, $muP, $muM, $numOfE);
 
 close(File);
-
-# practice test method
-#sub zeroToNum
-#{
- #   print("Practice Method \n");
-  #  $num = @_[0];
-   # print("$num \n");
-    #$sum = 0;
-    #
-    #for($i = 0; $i <= $num; $i++)
-    #{
-    #    #print("in loop \n");
-    #    $sum = $sum + $i;
-    #}
-    
-    #print("$sum\n");
-#}*/
-
-#zeroToNum(3);
-#print("$threeSum \n");
-#Should print 6
