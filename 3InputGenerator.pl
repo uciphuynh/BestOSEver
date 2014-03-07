@@ -1,4 +1,5 @@
 #File generator to be used for the results portion of our OS project according to specs
+#is a copy of Random File Generator but instead of 4 inputs as output, it ouputs 3
 #
 # authors: Phong Huynh, Shannon Lewis, Zach Soohoo, Rachel Chu
 # Group #: 32
@@ -17,10 +18,10 @@ use POSIX; #generates rounded numbers (using ceil and floor)
 #open the file to write to. File is our file handle
 #writes following the existing data (so make sure fed file is empty)
 
-#want to be able to call it like perl RandomFileGenerator.pl filename muBurst muPrio muMem numOfEntries
+#want to be able to call it like perl RandomFileGenerator.pl filename muBurst muPrio numOfEntries
 #each time you run you have to fill in all of the stuff
 
-if($#ARGV+1 != 5)
+if($#ARGV+1 != 4)
 {
     die "Not valid program call! Need filename, average burst, average priority
     , average memory needed, and number of entries";
@@ -29,8 +30,7 @@ if($#ARGV+1 != 5)
 $fileName = @ARGV[0];
 $muB = @ARGV[1];
 $muP = @ARGV[2];
-$muM = @ARGV[3];
-$numOfE = @ARGV[4];
+$numOfE = @ARGV[3];
 
 open(File, ">>$fileName") || die "Can't open the file";
 
@@ -43,7 +43,7 @@ sub buildFile
    #range by default would be (2*mu)/3 but if part of the range
    #falls out of the range given below we reroll   
     
-    if($#params+1 < 4)
+    if($#params+1 < 3)
     {
        print("Incorrect Number Of Arguements!");
        print("$#params");
@@ -55,18 +55,15 @@ sub buildFile
     #Delay times between 0 and 69
     #Priorities between 0 and 9 (normalized around mu)
     
-    $numOfLines = @params[3];
+    $numOfLines = @params[2];
     
     $muBurstTime = @params[0];
     $burstSTD = $muBurstTime/3;
     $muPriority = @params[1];
     $prioritySTD = $muPriority/3;
-    $muMemoryNeed = @params[2];
-    $memorySTD = $muMemoryNeed/3;
     
     $burstTimeGenerator = Math::Random::OO::Normal->new($muBurstTime, $burstSTD);
     $priorityGenerator = Math::Random::OO::Normal->new($muPriority, $prioritySTD);
-    $memoryNeedGenerator = Math::Random::OO::Normal->new($muMemoryNeed, $memorySTD);
     $burstTime = 0;
     $priority = 9;
 
@@ -97,24 +94,21 @@ sub buildFile
         {
             $priority = ceil($priorityGenerator->next());
             
-            if($priority > 0 && $priority < 9)
+            if($priority > 0 && $priority < 10)
             {
                 $validPriority = true;
             }
             
         }while(!$validPriority);
         
-        #for memory we don't need to concern ourselves with the limit of memory. it can even be 0...
-        $memory = ceil($memoryNeedGenerator->next());
-        
-        print File ("$entryTime $burstTime $priority $memory");
+        print File ("$entryTime $burstTime $priority");
         #print "$entryTime $burstTime $priority\n";
     }
     
     }
 }
 
-#buildFile(muBurst, muPriority, muMem, numOfEntries)
-buildFile($muB, $muP, $muM, $numOfE);
+#buildFile(muBurst, muPriority, numOfEntries)
+buildFile($muB, $muP, $numOfE);
 
 close(File);
