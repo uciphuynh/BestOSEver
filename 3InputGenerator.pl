@@ -58,9 +58,9 @@ sub buildFile
     $numOfLines = @params[2];
     
     $muBurstTime = @params[0];
-    $burstSTD = $muBurstTime/3;
+    $burstSTD = 99/6;
     $muPriority = @params[1];
-    $prioritySTD = $muPriority/3;
+    $prioritySTD = 9/6;
     
     $burstTimeGenerator = Math::Random::OO::Normal->new($muBurstTime, $burstSTD);
     $priorityGenerator = Math::Random::OO::Normal->new($muPriority, $prioritySTD);
@@ -74,8 +74,8 @@ sub buildFile
         {
             print File ("\n");
         }
-        $validBurst = false;
-        $validPriority = false;
+        $validBurst = 0;
+        $validPriority = 0;
         
         $entryTime = int(rand(70)); #generates a value within 0-69 automatically
         
@@ -85,10 +85,10 @@ sub buildFile
             
             if($burstTime > 0 && $burstTime < 100)
             {
-                $validBurst = true;
+                $validBurst = 1;
             }
         
-        } while(!$validBurst);
+        } while($validBurst == 0);
         
         do
         {
@@ -96,10 +96,10 @@ sub buildFile
             
             if($priority > 0 && $priority < 10)
             {
-                $validPriority = true;
+                $validPriority = 1;
             }
             
-        }while(!$validPriority);
+        }while($validPriority == 0);
         
         print File ("$entryTime $burstTime $priority");
         #print "$entryTime $burstTime $priority\n";

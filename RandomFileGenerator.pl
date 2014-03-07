@@ -7,6 +7,9 @@
 use Math::Random::OO::Normal; #generates random numbers based on normal distribution in decimal
 use POSIX; #generates rounded numbers (using ceil and floor)
 
+$maxMem = 100; #set this depending on the amount of memory we want the CPU scheduler to start off with
+#determines the range of values for MemNeeded (from 0 to maxMem)
+
 #print("Hi!!! This is Perl \n");
 
 #practice use of the generator
@@ -58,11 +61,11 @@ sub buildFile
     $numOfLines = @params[3];
     
     $muBurstTime = @params[0];
-    $burstSTD = $muBurstTime/3;
+    $burstSTD = 99/6;
     $muPriority = @params[1];
-    $prioritySTD = $muPriority/3;
+    $prioritySTD = 9/6;
     $muMemoryNeed = @params[2];
-    $memorySTD = $muMemoryNeed/3;
+    $memorySTD = $maxMem/6;
     
     $burstTimeGenerator = Math::Random::OO::Normal->new($muBurstTime, $burstSTD);
     $priorityGenerator = Math::Random::OO::Normal->new($muPriority, $prioritySTD);
@@ -77,8 +80,9 @@ sub buildFile
         {
             print File ("\n");
         }
-        $validBurst = false;
-        $validPriority = false;
+        
+        $validBurst = 0;
+        $validPriority = 0;
         
         $entryTime = int(rand(70)); #generates a value within 0-69 automatically
         
@@ -86,26 +90,35 @@ sub buildFile
         {
             $burstTime = ceil($burstTimeGenerator->next());
             
-            if($burstTime > 0 && $burstTime < 100)
+            if($burstTime >= 0 && $burstTime <= 100)
             {
-                $validBurst = true;
+                $validBurst = 1;
             }
         
-        } while(!$validBurst);
+        } while($validBurst == 0);
         
         do
         {
             $priority = ceil($priorityGenerator->next());
             
-            if($priority > 0 && $priority < 9)
+            if($priority >= 0 && $priority <= 9)
             {
-                $validPriority = true;
+                $validPriority = 1;
             }
             
-        }while(!$validPriority);
+        }while($validPriority == 0);
         
-        #for memory we don't need to concern ourselves with the limit of memory. it can even be 0...
-        $memory = ceil($memoryNeedGenerator->next());
+        #memory cannot be less than 0 but can be over the max?
+        $validMemAmount = 0;
+        do
+        {
+            $memory = ceil($memoryNeedGenerator->next());
+            if($memory >= 0)
+            {
+                $validMemAmount = 1;
+            }
+        
+        }while($validMemAmount == 0);
         
         print File ("$entryTime $burstTime $priority $memory");
         #print "$entryTime $burstTime $priority\n";
