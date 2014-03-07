@@ -54,7 +54,7 @@ sub buildFile
 
 buildFile($first, $second, $third, $four);
 
-close File;
+close(File);
 
 # practice test method
 #sub zeroToNum
