@@ -46,6 +46,9 @@ public class SJFSchedulingAlgorithm extends BaseSchedulingAlgorithm implements O
     
     /** Returns true if the job was present and was removed. */
     public boolean removeJob(Process p){
+    	if (p == activeJob) {
+    		activeJob = null;
+    	}
     	return jobs.remove(p);
     }
 
@@ -62,7 +65,11 @@ public class SJFSchedulingAlgorithm extends BaseSchedulingAlgorithm implements O
 
     /** Returns the next process that should be run by the CPU, null if none available.*/
     public Process getNextJob(long currentTime) {
-    	return jobs.get(0);
+    	if (!jobs.isEmpty()) {
+    		return jobs.get(0);
+    	} else {
+    		return null;
+    	}
     }
 
     public String getName(){
