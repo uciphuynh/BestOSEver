@@ -9,81 +9,67 @@
 package com.jimweller.cpuscheduler;
 
 import java.util.Vector;
-/*
- * My implementation of the class does NOT keep any active job in the queue;
- * the active job is popped before being run.
- */
 public class PrioritySchedulingAlgorithm extends BaseSchedulingAlgorithm implements OptionallyPreemptiveSchedulingAlgorithm {
 	private boolean preemptive;
 	private Vector<Process> jobs;
+	private Process aJob;			// Points to the currently running job.
 
 	PrioritySchedulingAlgorithm(){
-		activeJob = null;
 		jobs = new Vector<Process>();
 	}
 
-	/** Add the new job to the correct queue.
-	 * If there are no current jobs, the incoming job becomes the activeJob rather than entering the queue;
-	 * If preemption is enabled and the incoming job's priority is higher (lower weight) than the running job,
-	 * the incoming job is run;
-	 * Else, the incoming job is inserted wherever it belongs in the queue.*/
+	/** Add the new job to the correct queue.*/
 	public void addJob(Process p){
-		if(jobs.size() == 0){
-			activeJob = p;
+		if(jobs.isEmpty()){
+			jobs.add(p);
+			aJob = p;
 		}
-		else{
-			if (isPreemptive() && p.getPriorityWeight() < activeJob.getPriorityWeight()) {
-				jobs.add (0, activeJob);
-				activeJob = p;
-
+		boolean added = false;
+		for (int i = 0; i < jobs.size(); i++) {
+			if (p.getPriorityWeight() < jobs.get(i).getPriorityWeight()) {
+				jobs.add(i, p);
+				added = true;
+				break;
 			}
-			else {
-				for (int i = 0; i < jobs.size(); i++) {
-					if (p.getPriorityWeight() < jobs.get(i).getPriorityWeight()) {
-						jobs.add(i, p);
-						break;
-					}
-				}
-			}
+		}
+		if(!added){
+			jobs.add(p);
 		}
 	}
 
-	/** Returns true if the job was present and was removed. 
-	 * Also fetches the next job in the queue and runs it,
-	 * if the removed job was the active one; not sure if
-	 * this is desirable or not, but it's an easy fix
-	 * if it's not!*/
+	/** Returns true if the job was present and was removed.*/
 	public boolean removeJob(Process p){
-		if (activeJob.equals(p)){
-			if(jobs.size() != 0){
-				activeJob = jobs.remove(0);
-			}
-			else{
-				activeJob = null;
-			}
-			return true;
-		}
 		return jobs.remove(p);
 	}
 
 	/** Transfer all the jobs in the queue of a SchedulingAlgorithm to another, such as
 	when switching to another algorithm in the GUI */
 	public void transferJobsTo(SchedulingAlgorithm otherAlg) {
-		otherAlg.addJob(activeJob);
-		activeJob = null;
-		for(int i = 0; i < jobs.size(); i++){
-			otherAlg.addJob(jobs.remove(i));
+		while(!jobs.isEmpty()){
+			otherAlg.addJob(jobs.remove(0));
 		}
 	}
 
 
 	/** Returns the next process that should be run by the CPU, null if none available.*/
 	public Process getNextJob(long currentTime){
-		if(jobs.size() == 0){
+		if(aJob.isFinished()){
+			aJob = null;
+		}
+		if(jobs.isEmpty()){
 			return null;
 		}
-		return jobs.remove(0);
-		
+		else if(isPreemptive() && aJob != null && jobs.get(0).getPriorityWeight() < aJob.getPriorityWeight()){
+			aJob = jobs.get(0);
+			return aJob;
+		}
+		else if(aJob != null){
+			return aJob;
+		}
+		else {
+			aJob = jobs.get(0);
+			return aJob;
+		}
 	}
 
 	public String getName(){
