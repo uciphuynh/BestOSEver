@@ -82,8 +82,8 @@ public class PrioritySchedulingAlgorithm extends BaseSchedulingAlgorithm impleme
 		if(jobs.size() == 0){
 			return null;
 		}
-		activeJob = jobs.remove(0);
-		return activeJob;
+		return jobs.remove(0);
+		
 	}
 
 	public String getName(){
