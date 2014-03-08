@@ -30,6 +30,7 @@ public class SJFSchedulingAlgorithm extends BaseSchedulingAlgorithm implements O
         		cur = jobs.get(i);
         		if (p.getInitBurstTime() < cur.getBurstTime()) {	
         			jobs.add (i, p);
+        			break;
         		}		//BUGBUG change active job?
         	}
     	} else {
@@ -37,6 +38,7 @@ public class SJFSchedulingAlgorithm extends BaseSchedulingAlgorithm implements O
     			cur = jobs.get(i);
     			if (p.getInitBurstTime() < cur.getInitBurstTime()) {
     				jobs.add (i, p);
+    				break;
     			}
     		}
     	}
