@@ -40,7 +40,7 @@ public class SJFSchedulingAlgorithm extends BaseSchedulingAlgorithm implements O
     				if (cur.isActive()) {
     					jobs.add (i, p);
     				} else {
-    					jobs.add(i + 1, p);
+    					continue;
     				}
     				break;
     			}
