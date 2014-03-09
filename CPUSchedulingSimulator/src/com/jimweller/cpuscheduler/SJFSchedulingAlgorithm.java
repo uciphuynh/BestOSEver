@@ -24,29 +24,6 @@ public class SJFSchedulingAlgorithm extends BaseSchedulingAlgorithm implements O
 
     /** Add the new job to the correct queue.*/
     public void addJob(Process p){
-    	Process cur;
-    	if (isPreemptive()) {
-    		for (int i = 0; i < jobs.size(); i++) {
-        		cur = jobs.get(i);
-        		if (p.getInitBurstTime() < cur.getBurstTime()) {	
-        			jobs.add (i, p);
-        			break;
-        		}		
-        	}
-    	} else {
-    		for (int i = 0; i < jobs.size(); i++) {
-    			cur = jobs.get(i);
-    			if (p.getInitBurstTime() < cur.getInitBurstTime()) {
-    				if (cur.isActive()) {
-    					jobs.add (i, p);
-    				} else {
-    					continue;
-    				}
-    				break;
-    			}
-    		}
-    	}
-    	
     	jobs.add(p);
     }
     
@@ -72,7 +49,28 @@ public class SJFSchedulingAlgorithm extends BaseSchedulingAlgorithm implements O
     /** Returns the next process that should be run by the CPU, null if none available.*/
     public Process getNextJob(long currentTime) {
     	if (!jobs.isEmpty()) {
-    		return jobs.get(0);
+    		Process cur, shortestJob;
+    		int smallestTime;
+    		if (isPreemptive()) {
+    			for (int i = 0; i < jobs.size(); i ++) {
+    				cur = jobs.get(i);
+    				if (cur.getBurstTime() < smallestTime) {
+    					smallestTime = cur.getBurstTime();
+    					shortestJob = cur;
+    				}
+    			}
+    		} else {
+    			for (int i = 0; i < jobs.size(); i++) {
+    				cur = jobs.get(i);
+    				if (cur.isActive()) {
+    					return cur;
+    				} else if (cur.getInitBurstTime() < smallestTime) {
+    					shortestJob = cur;
+    					smallestTime = cur.getInitBurstTime();
+    				}
+    			}
+    		}
+    		return shortestJob;
     	} else {
     		return null;
     	}
