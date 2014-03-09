@@ -18,6 +18,7 @@ import java.text.*;
 public class CPUScheduler {
 	/** Which scheduling algorithm is in use currently */
 	private SchedulingAlgorithm schedulingAlgorithm;
+	private int maxMemory = 0;
 
 	/**
 	 * The default number of processes to randomly generate. The programmer can
@@ -755,7 +756,7 @@ public class CPUScheduler {
 	
 	public void setMaxMemory(int memory)
 	{
-		
+		maxMemory = memory;
 	}
 
 }// ENDS class CPUScheduler
