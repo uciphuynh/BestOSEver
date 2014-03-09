@@ -24,16 +24,18 @@ public class PrioritySchedulingAlgorithm extends BaseSchedulingAlgorithm impleme
 			jobs.add(p);
 			aJob = p;
 		}
-		boolean added = false;
-		for (int i = 0; i < jobs.size(); i++) {
-			if (p.getPriorityWeight() < jobs.get(i).getPriorityWeight()) {
-				jobs.add(i, p);
-				added = true;
-				break;
+		else{
+			boolean added = false;
+			for (int i = 0; i < jobs.size(); i++) {
+				if (p.getPriorityWeight() < jobs.get(i).getPriorityWeight()) {
+					jobs.add(i, p);
+					added = true;
+					break;
+				}
 			}
-		}
-		if(!added){
-			jobs.add(p);
+			if(!added){
+				jobs.add(p);
+			}
 		}
 	}
 
