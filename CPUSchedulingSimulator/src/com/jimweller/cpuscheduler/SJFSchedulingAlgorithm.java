@@ -50,7 +50,8 @@ public class SJFSchedulingAlgorithm extends BaseSchedulingAlgorithm implements O
     public Process getNextJob(long currentTime) {
     	if (!jobs.isEmpty()) {
     		Process cur, shortestJob;
-    		int smallestTime;
+    		shortestJob = null;
+    		long smallestTime = Integer.MAX_VALUE;
     		if (isPreemptive()) {
     			for (int i = 0; i < jobs.size(); i ++) {
     				cur = jobs.get(i);
