@@ -31,13 +31,17 @@ public class SJFSchedulingAlgorithm extends BaseSchedulingAlgorithm implements O
         		if (p.getInitBurstTime() < cur.getBurstTime()) {	
         			jobs.add (i, p);
         			break;
-        		}		//BUGBUG change active job?
+        		}		
         	}
     	} else {
     		for (int i = 0; i < jobs.size(); i++) {
     			cur = jobs.get(i);
     			if (p.getInitBurstTime() < cur.getInitBurstTime()) {
-    				jobs.add (i, p);
+    				if (cur.isActive()) {
+    					jobs.add (i, p);
+    				} else {
+    					jobs.add(i + 1, p);
+    				}
     				break;
     			}
     		}
