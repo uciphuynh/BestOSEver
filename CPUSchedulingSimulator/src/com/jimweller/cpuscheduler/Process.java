@@ -63,6 +63,9 @@ public class Process{
 	of this process */
     long lifetime = 0;
     
+    //amount of memory the process needs to execute
+    long memoryNeeded = 0;
+    
     /** a way to check if a process has occured yet */
     boolean arrived = false;
 
@@ -85,6 +88,7 @@ public class Process{
 	initBurst = burst;
 	delay = (long) (Math.random() * 70 );
 	priority = (long) Math.round((Math.random() * 9));
+	memoryNeeded = 0;
     }
 
 
@@ -98,13 +102,14 @@ public class Process{
 	         arrival of the previous process.
 	@param p The priority weight of the process.
     */
-    Process(long b, long d, long p){
+    Process(long b, long d, long p, long m){
 	nextPID++;
 	PID = nextPID;
 	burst = b;
 	initBurst = burst;
 	delay = d;
 	priority = p;
+	memoryNeeded = m;
     }
 
 

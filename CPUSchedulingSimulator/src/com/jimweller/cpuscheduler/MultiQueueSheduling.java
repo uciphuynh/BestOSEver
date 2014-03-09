@@ -22,14 +22,18 @@ implements OptionallyPreemptiveSchedulingAlgorithm
 	private boolean canInterrupt;
 	
 	//private LinkedList<Process> queue1; //round robin with quantum (already provided with parent class)
-	//so queue1 = queue...
+	//so queue1 = queue.
 	private LinkedList<Process> queue2;// round robin with 2*quantum
 	private LinkedList<Process> queue3;// first come first serve (round robin with quantum of infinity)
 	
 	private final long QUEUE3_HIGHEST_PRIORITY = 7;
 	private final long QUEUE2_HIGHEST_PRIORITY = 4;
-	private final int INFINITE_QUANTUM = 100000;
 	
+	//since max burst time is 99, 100 is infinite
+	private final int INFINITE_QUANTUM = 100;
+	
+	//preemption here means if a process from a higher queue enters, the currently
+	//running process gets interrupted
 	public boolean isPreemptive() {
 		
 		return canInterrupt;

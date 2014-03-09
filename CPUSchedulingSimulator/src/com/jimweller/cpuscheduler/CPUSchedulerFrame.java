@@ -38,6 +38,7 @@ public class CPUSchedulerFrame extends JFrame implements ActionListener {
 
     JCheckBox startCB;
     JTextField quantumField;
+    JTextField memoryField;
     ImageIcon playPic, pausePic, pressPic;
 
 
@@ -77,6 +78,7 @@ public class CPUSchedulerFrame extends JFrame implements ActionListener {
 
 	//setup animation and simulation
 	cpu = new CPUScheduler();
+	
 	int delay = (fps > 0) ? (1000 / fps) : 100;
         timer = new Timer(delay,this);
         timer.setCoalesce(false); // don't combine queued events
@@ -124,6 +126,8 @@ public class CPUSchedulerFrame extends JFrame implements ActionListener {
 	bottomRow.add(startCB);
 	bottomRow.add(new JLabel("Quantum"));
 	bottomRow.add(quantumField);
+	bottomRow.add(new JLabel("Max Memory"));
+	bottomRow.add(memoryField);
 
 	masterPanel.add(topRow);
 	masterPanel.add(middleRow);
@@ -404,9 +408,11 @@ public class CPUSchedulerFrame extends JFrame implements ActionListener {
 
 	else {
 	    //Check if it's one of the algorithms
+		
 	    for (int i = 0; i < algButtons.size(); i++){
 		if( e.getSource() == algButtons.get(i)){
 		    SchedulingAlgorithm newAlg = algs.get(i);
+		    
 
 		    //set quantum if RR alg
 		    try {
@@ -425,6 +431,7 @@ public class CPUSchedulerFrame extends JFrame implements ActionListener {
 		    }
 
 		    cpu.setAlgorithm(newAlg);
+		    cpu.setMaxMemory(Integer.parseInt(memoryField.getText()));
 		    algolLbl.setText(newAlg.getName());
 		    break;
 		}
@@ -695,6 +702,11 @@ public class CPUSchedulerFrame extends JFrame implements ActionListener {
 	quantumField = new JTextField("10", 10);
 	quantumField.setToolTipText("Quantum");
 	startCB.setAlignmentX(Component.RIGHT_ALIGNMENT);
+	
+	memoryField = new JTextField("100", 10);
+	memoryField.setToolTipText("Max Memory");
+	startCB.setAlignmentX(Component.RIGHT_ALIGNMENT);
+	
     }
 
     /**

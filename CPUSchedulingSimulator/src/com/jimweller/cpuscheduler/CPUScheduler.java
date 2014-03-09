@@ -120,7 +120,7 @@ public class CPUScheduler {
 		activeJob = null;
 		Process proc = null;
 		String s = null;
-		long b = 0, d = 0, p = 0;
+		long b = 0, d = 0, p = 0, m = 0;
 		try {
 			BufferedReader input = new BufferedReader(new FileReader(filename));
 			while ((s = input.readLine()) != null) {
@@ -129,8 +129,8 @@ public class CPUScheduler {
 				d = Long.parseLong(st.nextToken());
 				p = Long.parseLong(st.nextToken());
 				//if doing memory constraint need to parse out the memory token
-				
-				proc = new Process(b, d, p);
+				m = Long.parseLong(st.nextToken());
+				proc = new Process(b, d, p, m);
 				allProcs.add(proc);
 			}
 
@@ -150,7 +150,7 @@ public class CPUScheduler {
 		activeJob = null;
 		Process proc = null;
 		String s = null;
-		long b = 0, d = 0, p = 0;
+		long b = 0, d = 0, p = 0, m = 0;
 		try {
 			BufferedReader input = new BufferedReader(new FileReader(filename));
 			while ((s = input.readLine()) != null) {
@@ -158,8 +158,8 @@ public class CPUScheduler {
 				b = Long.parseLong(st.nextToken());
 				d = Long.parseLong(st.nextToken());
 				p = Long.parseLong(st.nextToken());
-			
-				proc = new Process(b, d, p);
+				m = Long.parseLong(st.nextToken());
+				proc = new Process(b, d, p, m);
 				allProcs.add(proc);
 			}
 
@@ -751,6 +751,11 @@ public class CPUScheduler {
 	 */
 	public String getAlgorithmName() {
 		return schedulingAlgorithm.getName();
+	}
+	
+	public void setMaxMemory(int memory)
+	{
+		
 	}
 
 }// ENDS class CPUScheduler
