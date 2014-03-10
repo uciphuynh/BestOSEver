@@ -15,15 +15,13 @@ public class FCFSSchedulingAlgorithm extends BaseSchedulingAlgorithm {
 	LinkedList<Process> jobs;
     FCFSSchedulingAlgorithm()
     {
-    	activeJob = null;
     	jobs = new LinkedList<Process>();
-
     }
 
     /** Add the new job to the correct queue.*/
     public void addJob(Process p)
-    {
-    	jobs.add(p);
+    {   	
+    	jobs.add(p); 	 	   	
     }
     
     /** Returns true if the job was present and was removed. */
@@ -36,10 +34,9 @@ public class FCFSSchedulingAlgorithm extends BaseSchedulingAlgorithm {
 	when switching to another algorithm in the GUI */
     public void transferJobsTo(SchedulingAlgorithm otherAlg) 
     {
-    	otherAlg.addJob(activeJob);
-    	for(Process job : jobs)
+    	while(!jobs.isEmpty())
     	{
-    		otherAlg.addJob(job);
+    		otherAlg.addJob(jobs.remove());
     	}
     }
 
@@ -52,13 +49,14 @@ public class FCFSSchedulingAlgorithm extends BaseSchedulingAlgorithm {
     /** Returns the next process that should be run by the CPU, null if none available.*/
     public Process getNextJob(long currentTime)
     {
+    	
     	if(jobs.isEmpty())
     	{
     		return null;
     	}
     	else
     	{
-    		return jobs.pop();	
+    		return jobs.getFirst();	
     	}
     }
 
