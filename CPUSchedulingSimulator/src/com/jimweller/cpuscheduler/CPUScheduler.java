@@ -758,5 +758,22 @@ public class CPUScheduler {
 	{
 		maxMemory = memory;
 	}
+	
+	public int getMaxMemory()
+	{
+		return maxMemory;
+	}
+	public int getMemoryAllocated()
+	{
+		return 0;
+	}
+	public int getAmountOfFreeMemory()
+	{
+		return maxMemory;
+	}
+	public int numberOfSuspendedProcesses()
+	{
+		return 0;
+	}
 
 }// ENDS class CPUScheduler

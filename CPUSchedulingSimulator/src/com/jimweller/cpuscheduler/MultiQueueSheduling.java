@@ -136,11 +136,11 @@ implements OptionallyPreemptiveSchedulingAlgorithm
 			{
 				return activeJob;
 			}
-			else if(currentlyRunningQueue == 2 && psuedoQuant < 2*quantum)
+			else if(currentlyRunningQueue == 2 && (psuedoQuant < 2*quantum))
 			{
 				return activeJob;
 			}
-			else if(currentlyRunningQueue == 3 && psuedoQuant < INFINITE_QUANTUM)
+			else if((currentlyRunningQueue == 3 && psuedoQuant < INFINITE_QUANTUM))
 			{
 				return activeJob;
 			}

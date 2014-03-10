@@ -52,6 +52,7 @@ public class CPUSchedulerFrame extends JFrame implements ActionListener {
 
     JLabel statusBar,algolLbl;
     StatsPanel waitSP, turnSP,responseSP;
+    MemoryPanel memorySP;
     ClockPanel cpuTimePanel;
 
     JSlider delaySlider, lengthSlider, countSlider, quantumSlider;
@@ -121,6 +122,7 @@ public class CPUSchedulerFrame extends JFrame implements ActionListener {
 	middleRow.add(responseSP);
 	middleRow.add(turnSP);
 	middleRow.add(waitSP);
+	middleRow.add(memorySP);
 
 	//bottomRow.add(middleRow);
 	bottomRow.add(startCB);
@@ -217,6 +219,10 @@ public class CPUSchedulerFrame extends JFrame implements ActionListener {
 				  " it takes for the CPU to begin execution"+
 				  " of a process after it has entered the"+
 				  " ready queue.");
+	memorySP = new MemoryPanel("Memory");
+	memorySP.setStats(0,0,0,0);
+	memorySP.setToolTipText("Memory is the amount of memory available in the" +
+			" system and is being currently allocated. ");
 
 
 	algolLbl = new JLabel("FCFS",JLabel.CENTER);
@@ -496,6 +502,10 @@ public class CPUSchedulerFrame extends JFrame implements ActionListener {
 			 cpu.getMeanTurn(),
 			 cpu.getMaxTurn(),
 			 cpu.getStdDevTurn());
+	memorySP.setStats(cpu.getMaxMemory(), 
+			cpu.getMemoryAllocated(),
+			cpu.getAmountOfFreeMemory(),
+			cpu.numberOfSuspendedProcesses());
     }   
 
 
