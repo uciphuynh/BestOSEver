@@ -32,6 +32,16 @@ implements OptionallyPreemptiveSchedulingAlgorithm
 	//since max burst time is 99, 100 is infinite
 	private final int INFINITE_QUANTUM = 100;
 	
+	private int currentlyRunningQueue = 3;
+	private long quantumStart;
+	
+	
+	public MultiQueueSheduling()
+	{
+		queue2 = new LinkedList<Process>();
+		queue3 = new LinkedList<Process>();
+	}
+	
 	//preemption here means if a process from a higher queue enters, the currently
 	//running process gets interrupted
 	public boolean isPreemptive() {
@@ -54,27 +64,17 @@ implements OptionallyPreemptiveSchedulingAlgorithm
 		{
 			if(p.priority < QUEUE2_HIGHEST_PRIORITY)
 			{
-				//add to queue 1
-				//and interrupt the current running process if the current running is not in
-				//queue 1 
-				
-				if(canInterrupt)
-				{
-					
-				}
+				queue.add(p);
 			}
 			else
 			{
-				//add to queue 2
-				if(canInterrupt)
-				{
-					
-				}
+				//add to queue2
+				queue2.add(p);
 			}
 		}
 		else
 		{
-			//add to queue 3
+			queue3.add(p);
 		}
 		
 	}
@@ -83,14 +83,41 @@ implements OptionallyPreemptiveSchedulingAlgorithm
 	public boolean removeJob(Process p) {
 		// TODO Auto-generated method stub
 		
-		//check if p is done and remove p from its respective queue
 		
-		return false;
+		//check if p is done and remove p from its respective queue
+		if(p.getPriorityWeight() < QUEUE2_HIGHEST_PRIORITY)
+		{
+			return queue.remove(p);
+		}
+		else if(p.getPriorityWeight() < QUEUE3_HIGHEST_PRIORITY)
+		{
+			return queue2.remove(p);
+		}
+		else
+		{
+			return queue3.remove(p);
+		}
 	}
 
 	@Override
 	public void transferJobsTo(SchedulingAlgorithm otherAlg) {
 		// TODO Auto-generated method stub
+		
+		//transferring the jobs in the order of priority...ish...
+		for(int i = 0; i < queue.size();i++)
+		{
+			otherAlg.addJob(queue.get(i));
+		}
+		
+		for(int j = 0; j < queue2.size(); j++)
+		{
+			otherAlg.addJob(queue2.get(j));
+		}
+		
+		for(int k = 0; k < queue3.size(); k++)
+		{
+			otherAlg.addJob(queue3.get(k));
+		}
 		
 	}
 
@@ -98,21 +125,48 @@ implements OptionallyPreemptiveSchedulingAlgorithm
 	public Process getNextJob(long currentTime) {
 		// TODO Auto-generated method stub
 		
-		//check through the higher level queues first
-		
-		if(queue.size() > 0)
+		//if I can't interrupt, I need to look to see if the quantum is fulfilled
+		if(activeJob != null && !canInterrupt)
+		{
+			
+			//check if the quantum time is done
+			long psuedoQuant = currentTime - quantumStart;
+			
+			if(currentlyRunningQueue == 1 && (psuedoQuant < quantum))
+			{
+				return activeJob;
+			}
+			else if(currentlyRunningQueue == 2 && psuedoQuant < 2*quantum)
+			{
+				return activeJob;
+			}
+			else if(currentlyRunningQueue == 3 && psuedoQuant < INFINITE_QUANTUM)
+			{
+				return activeJob;
+			}
+		}
+		else if(queue.size() > 0)
 		{
 			//return queue 1 job and set method to queue1
+			quantumStart = currentTime;
+			currentlyRunningQueue = 1;
+			return queue.get(0);
 		}
-		
-		if(queue2.size() > 0)
+		else if(queue2.size() > 0)
 		{
-			//return queue 2 job and set scheduling method to queue 2
+			quantumStart = currentTime;
+			currentlyRunningQueue = 2;
+			return queue2.get(0);
 		}
-		
-		//return queue 3 job
+		else
+		{
+			quantumStart = currentTime;
+			currentlyRunningQueue = 3;
+			return queue3.get(0);
+		}
 		
 		return null;
+		
 	}
 
 	@Override

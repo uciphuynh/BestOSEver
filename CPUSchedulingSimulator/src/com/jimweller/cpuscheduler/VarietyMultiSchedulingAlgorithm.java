@@ -8,7 +8,9 @@ import java.util.ArrayList;
 
 //not too sure if I want the option of let 1 queue be preemptive and the others not...
 
-public class VarietyMultiSchedulingAlgorithm extends RoundRobinSchedulingAlgorithm implements OptionallyPreemptiveSchedulingAlgorithm
+//MultiQueueSheduling (forgot a 'c' sorry) already extends round robin
+
+public class VarietyMultiSchedulingAlgorithm extends MultiQueueSheduling implements OptionallyPreemptiveSchedulingAlgorithm
 {
 	boolean canInterrupt;
 	//private LinkedList queue;

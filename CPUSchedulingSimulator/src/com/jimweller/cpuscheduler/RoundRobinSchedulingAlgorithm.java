@@ -18,6 +18,7 @@ public class RoundRobinSchedulingAlgorithm extends BaseSchedulingAlgorithm {
     protected LinkedList<Process> queue;
     private LinkedList<Process> waiting;
     private LinkedList<Process> toAdd;
+    
     public RoundRobinSchedulingAlgorithm() 
     {
     	queue = new LinkedList<Process>();
@@ -83,7 +84,7 @@ public class RoundRobinSchedulingAlgorithm extends BaseSchedulingAlgorithm {
      * available.
      */
     public Process getNextJob(long currentTime) 
-    {
+    {	
     	if(queue.isEmpty() && waiting.isEmpty() && toAdd.isEmpty())
     	{
     		System.out.println("D");

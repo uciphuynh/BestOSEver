@@ -10,6 +10,7 @@ import java.text.*;
  */
 public class JunkGenerator {
 
+	private static final int MAX_MEMORY = 100;
 
     public static void main(String args[]){
         
@@ -17,8 +18,9 @@ public class JunkGenerator {
 	    long burst = (long) (Math.random() * 99 + 1 );
 	    long delay = (long) (Math.random() * 50);
 	    long priority = (long) (Math.random() * 9);
-	    //long memory = (long) (Math.random()*100);
-	    System.out.println(burst+"\t"+delay+"\t"+priority);
+	    //default max memory is 100
+	    long memory = (long) (Math.random()*MAX_MEMORY);
+	    System.out.println(burst+"\t"+delay+"\t"+priority+"\t"+memory);
 	}
     }
 
