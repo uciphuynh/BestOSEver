@@ -20,7 +20,6 @@ public class RoundRobinSchedulingAlgorithm extends BaseSchedulingAlgorithm {
     private LinkedList<Process> toAdd;
     public RoundRobinSchedulingAlgorithm() 
     {
-    	activeJob = null;
     	queue = new LinkedList<Process>();
     	waiting = new LinkedList<Process>();
     	toAdd = new LinkedList<Process>();
@@ -30,7 +29,7 @@ public class RoundRobinSchedulingAlgorithm extends BaseSchedulingAlgorithm {
     /** Add the new job to the correct queue. */
     public void addJob(Process p) 
     {
-    	waiting.add(p);
+    	toAdd.add(p);
     }
 
     /** Returns true if the job was present and was removed. */
@@ -43,19 +42,19 @@ public class RoundRobinSchedulingAlgorithm extends BaseSchedulingAlgorithm {
 	when switching to another algorithm in the GUI */
     public void transferJobsTo(SchedulingAlgorithm otherAlg) 
     {
-    	otherAlg.addJob(activeJob);
-    	for(Process job : queue)
+    	while(!queue.isEmpty())
     	{
-    		otherAlg.addJob(job);
+    		otherAlg.addJob(queue.remove());
     	}
-    	for(Process job : waiting)
+    	while(!waiting.isEmpty())
     	{
-    		otherAlg.addJob(job);
+    		otherAlg.addJob(waiting.remove());
     	}
-    	for(Process job : toAdd)
+    	while(!toAdd.isEmpty())
     	{
-    		otherAlg.addJob(job);
+    		otherAlg.addJob(toAdd.remove());
     	}
+    	
     }
 
     /**
@@ -87,17 +86,18 @@ public class RoundRobinSchedulingAlgorithm extends BaseSchedulingAlgorithm {
     {
     	if(queue.isEmpty() && waiting.isEmpty() && toAdd.isEmpty())
     	{
+    		System.out.println("D");
     		return null;
     	}
     	else
     	{
     		if(queue.isEmpty())
     		{
-    			for(Process job : waiting)
+    			while(!waiting.isEmpty())
     			{
     				queue.add(waiting.pop());
     			}
-    			for(Process job : toAdd)
+    			while(!toAdd.isEmpty())
     			{
     				queue.add(toAdd.pop());
     			}
