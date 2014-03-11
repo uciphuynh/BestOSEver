@@ -1,5 +1,6 @@
 #File generator to be used for the results portion of our OS project according to specs
 #is a copy of Random File Generator but instead of 4 inputs as output, it ouputs 3
+# format is : perl 3InputGenerator.pl filename burst prio entryCount
 #
 # authors: Phong Huynh, Shannon Lewis, Zach Soohoo, Rachel Chu
 # Group #: 32
@@ -24,7 +25,7 @@ use POSIX; #generates rounded numbers (using ceil and floor)
 if($#ARGV+1 != 4)
 {
     die "Not valid program call! Need filename, average burst, average priority
-    , average memory needed, and number of entries";
+    , and number of entries";
 }
 
 $fileName = @ARGV[0];
