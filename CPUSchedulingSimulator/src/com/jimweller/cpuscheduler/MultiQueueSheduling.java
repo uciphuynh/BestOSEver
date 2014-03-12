@@ -38,6 +38,7 @@ implements OptionallyPreemptiveSchedulingAlgorithm
 	
 	public MultiQueueSheduling()
 	{
+		super();
 		queue2 = new LinkedList<Process>();
 		queue3 = new LinkedList<Process>();
 	}

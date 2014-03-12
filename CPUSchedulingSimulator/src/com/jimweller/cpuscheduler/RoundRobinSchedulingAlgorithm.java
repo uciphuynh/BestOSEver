@@ -15,22 +15,22 @@ public class RoundRobinSchedulingAlgorithm extends BaseSchedulingAlgorithm {
     /** the timeslice each process gets */
     //needs to be protected so MultiQueue can use this...
 	protected int quantum;
+	protected long quantumStart;
     protected LinkedList<Process> queue;
-    private LinkedList<Process> waiting;
-    private LinkedList<Process> toAdd;
     
     public RoundRobinSchedulingAlgorithm() 
     {
+    	activeJob = null;
     	queue = new LinkedList<Process>();
-    	waiting = new LinkedList<Process>();
-    	toAdd = new LinkedList<Process>();
     	quantum = 0;
     }
 
     /** Add the new job to the correct queue. */
     public void addJob(Process p) 
     {
-    	toAdd.add(p);
+    	//System.out.println("added a job");
+    	//queue adds P to the back of the queue
+    	queue.add(p);
     }
 
     /** Returns true if the job was present and was removed. */
@@ -46,14 +46,6 @@ public class RoundRobinSchedulingAlgorithm extends BaseSchedulingAlgorithm {
     	while(!queue.isEmpty())
     	{
     		otherAlg.addJob(queue.remove());
-    	}
-    	while(!waiting.isEmpty())
-    	{
-    		otherAlg.addJob(waiting.remove());
-    	}
-    	while(!toAdd.isEmpty())
-    	{
-    		otherAlg.addJob(toAdd.remove());
     	}
     	
     }
@@ -85,27 +77,28 @@ public class RoundRobinSchedulingAlgorithm extends BaseSchedulingAlgorithm {
      */
     public Process getNextJob(long currentTime) 
     {	
-    	if(queue.isEmpty() && waiting.isEmpty() && toAdd.isEmpty())
+    	System.out.println("Get next job called!");
+    	if(queue.isEmpty())
     	{
     		System.out.println("D");
     		return null;
     	}
-    	else
+    	else if((currentTime - quantumStart >= quantum) || queue.get(0).isFinished() )
     	{
-    		if(queue.isEmpty())
-    		{
-    			while(!waiting.isEmpty())
-    			{
-    				queue.add(waiting.pop());
-    			}
-    			while(!toAdd.isEmpty())
-    			{
-    				queue.add(toAdd.pop());
-    			}
-    		}
-    		waiting.add(queue.pop());
-    		return waiting.getLast();
+    		//if there is a current process running
+    		//if quantum time is up or finished, call next job
+    		//if not, return currently running process
+    		//long timeElapsed = currentTime - quantumStart;
+    		//System.out.println("Time Elapsed: " + timeElapsed);
+	    	Process origRunning = queue.pop();
+	    	//moved the process to the back of the queue
+	    	queue.add(origRunning);
+	    	quantumStart = currentTime;
+	    	
     	}
+    	
+    	//System.out.println("just returned head");
+    	return queue.get(0);
     }
 
     public String getName() {

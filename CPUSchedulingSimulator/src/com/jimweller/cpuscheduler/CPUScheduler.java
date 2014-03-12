@@ -322,7 +322,7 @@ public class CPUScheduler {
 					procsIn++;
 					takenMemory = takenMemory + (int)p.getMemUse();
 					freeMemory = maxMemory - takenMemory;
-					System.out.println("Free Memory:" + freeMemory);
+					//System.out.println("Free Memory:" + freeMemory);
 				}
 				else
 				{
