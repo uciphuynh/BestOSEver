@@ -18,7 +18,11 @@ import java.text.*;
 public class CPUScheduler {
 	/** Which scheduling algorithm is in use currently */
 	private SchedulingAlgorithm schedulingAlgorithm;
-	private int maxMemory = 0;
+	private long maxMemory = 0; //max amount of memory allowed in the CPU
+	private long freeMemory; //amount of free memory
+	private long takenMemory; //amount of taken memory
+	private ArrayList<Process> suspended; //list of suspended processes
+	//b/c they need more memory than freeMemory
 
 	/**
 	 * The default number of processes to randomly generate. The programmer can
@@ -192,6 +196,14 @@ public class CPUScheduler {
 				p.waiting(currentTime);
 			}
 		}
+		
+		//suspended processes are waiting...
+		for(int j = 0; j < suspended.size(); j++)
+		{
+			p = (Process) suspended.get(j);
+			p.waiting(currentTime);
+		}
+		
 	}
 
 	/**
@@ -242,7 +254,8 @@ public class CPUScheduler {
 		for (i = 0; i < allProcs.size(); i++) {
 			p = (Process) allProcs.get(i);
 
-			if (p.isFinished()) {
+			if (p.isFinished()) 
+			{
 				finishedCount++;
 				int waited = (int) p.getWaitTime();
 				int turned = (int) p.getLifetime();
@@ -252,7 +265,7 @@ public class CPUScheduler {
 				allTurned += turned;
 				sDevTurned += turned;
 				sDevTurnedSquared += turned * turned;
-
+				
 				if (waited < minWait || i == 0) {
 					minWait = waited;
 				} else if (waited > maxWait || i == 0) {
@@ -301,10 +314,23 @@ public class CPUScheduler {
 		for (int i = 0; i < jobQueue.size(); i++) {
 			p = (Process) jobQueue.get(i);
 			if (p.getArrivalTime() == currentTime) {
-				readyQueue.add(p);
-				schedulingAlgorithm.addJob(p);
-				procsIn++;
+				
+				if((int)p.getMemUse() <= freeMemory)
+				{
+					readyQueue.add(p);
+					schedulingAlgorithm.addJob(p);
+					procsIn++;
+					takenMemory = takenMemory + (int)p.getMemUse();
+					freeMemory = maxMemory - takenMemory;
+					System.out.println("Free Memory:" + freeMemory);
+				}
+				else
+				{
+					suspended.add(p);
+				}
 			}
+			
+			//System.out.println("Entry time: " + p.getArrivalTime());
 		}
 
 	}
@@ -318,8 +344,28 @@ public class CPUScheduler {
 				readyQueue.remove(i);
 				schedulingAlgorithm.removeJob(p);
 				procsOut++;
+				takenMemory = takenMemory - (int)p.getMemUse();
+				freeMemory = maxMemory - takenMemory;
+				addToReadySuspended();
 			}
 		}
+	}
+	
+	void addToReadySuspended()
+	{
+		for(int i = 0; i < suspended.size(); i++)
+		{
+			if(suspended.get(i).getMemUse() <= freeMemory)
+			{
+				readyQueue.add(suspended.get(i));
+				schedulingAlgorithm.addJob(suspended.get(i));
+				procsIn++;
+				takenMemory = takenMemory + suspended.get(i).getMemUse();
+				freeMemory = maxMemory - takenMemory;
+				suspended.remove(i);
+			}
+		}
+		
 	}
 
 	/** Get rid of jobs that are done */
@@ -335,10 +381,14 @@ public class CPUScheduler {
 	}
 
 	/** Load all the jobs into the job queue and setup their arrival times */
-	public void LoadJobQueue(Vector jobs) {
-	        schedulingAlgorithm = new RandomSchedulingAlgorithm();
-	        Process p;
+	public void LoadJobQueue(Vector<Process> jobs) {
+	    schedulingAlgorithm = new RandomSchedulingAlgorithm();
+	    Process p;
 		long arTime = 0;
+		suspended = new ArrayList<Process>();
+		freeMemory = maxMemory;
+		takenMemory = maxMemory - freeMemory;
+		
 		for (int i = 0; i < jobs.size(); i++) {
 			p = (Process) jobs.get(i);
 			arTime += p.getDelayTime();
@@ -757,23 +807,25 @@ public class CPUScheduler {
 	public void setMaxMemory(int memory)
 	{
 		maxMemory = memory;
+		//update amount that's free
+		freeMemory = maxMemory - takenMemory;
 	}
 	
 	public int getMaxMemory()
 	{
-		return maxMemory;
+		return (int)maxMemory;
 	}
 	public int getMemoryAllocated()
 	{
-		return 0;
+		return (int)takenMemory;
 	}
 	public int getAmountOfFreeMemory()
 	{
-		return maxMemory;
+		return (int)freeMemory;
 	}
 	public int numberOfSuspendedProcesses()
 	{
-		return 0;
+		return suspended.size();
 	}
 
 }// ENDS class CPUScheduler

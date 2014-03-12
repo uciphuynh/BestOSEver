@@ -120,8 +120,8 @@ sub buildFile
         
         }while($validMemAmount == 0);
         
-        print File ("$entryTime $burstTime $priority $memory");
-        #print "$entryTime $burstTime $priority\n";
+        print File ("$burstTime $entryTime $priority $memory");
+        #print "$burstTime $delayTime $priority\n";
     }
     
     }

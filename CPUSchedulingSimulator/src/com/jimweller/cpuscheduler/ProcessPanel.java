@@ -20,10 +20,12 @@ class ProcessPanel extends JPanel{
     Process proc;
 
     /** The width of the process panel */
-    static final int PPWIDTH  = 10;
+    //original value is 10 but to make the complbl fit, it'll need to be 24
+    static final int PPWIDTH  = 24;
 
     /** The height of the process panel */
     static final int PPHEIGHT = 115;
+    //static final int PPHEIGHT = 200;
 
     /** The height you want the meters drawn. I do a 1:1 ratio with my maximum burst. */
     static final int BARHEIGHT = 100;
@@ -32,10 +34,17 @@ class ProcessPanel extends JPanel{
     Color burstColor,
 	initBurstColor=Color.darkGray,
 	unarrivedColor,
-	lblColor;
+	lblColor,
+	memLabelColor;
     
     /** The label to show the priority. */
-    JLabel priLbl;
+    //JLabel priLbl;
+    
+    //label that shows memory and priority
+    JLabel compLbl;
+    
+    //the label to show the memory
+    //JLabel memLbl;
 
     /** Do you want to see unarrived processes? Look into the future.  */
     static boolean showHidden=false;
@@ -63,10 +72,20 @@ class ProcessPanel extends JPanel{
 	setAlignmentX(Component.LEFT_ALIGNMENT);
 	setLayout(new BorderLayout());
 	
-	priLbl = new JLabel(""+ (int)proc.getPriorityWeight());
+	/*priLbl = new JLabel(""+ (int)proc.getPriorityWeight());
 	priLbl.setToolTipText("Once a process has arrived this shows its"+
 			      " priority. (0 High and 9 Low)");
 	priLbl.setHorizontalAlignment(SwingConstants.CENTER);
+	
+	memLbl = new JLabel("" + (int)proc.getMemUse());
+	memLbl.setToolTipText("The amount of memory needed by this process");
+	memLbl.setHorizontalAlignment(SwingConstants.CENTER);
+	*/
+	
+	compLbl = new JLabel("" + (int)proc.getPriorityWeight() + ","
+			+ (int) proc.getMemUse());
+	compLbl.setToolTipText("Priority of the process followed by the memory needed by the process");
+	compLbl.setHorizontalAlignment(SwingConstants.CENTER);
 
 
 	//Font jf =  new Font("Dialog",Font.PLAIN,10);
@@ -76,7 +95,9 @@ class ProcessPanel extends JPanel{
 	setSize(PPWIDTH,PPHEIGHT);
 	setBackground(Color.white);
 	setOpaque(true);
-	add(priLbl,"South");
+	//add(priLbl, "South");
+	//add(memLbl, "South");
+	add(compLbl, "South");
     }
 
     /**
@@ -117,10 +138,12 @@ class ProcessPanel extends JPanel{
 	    (proc.isActive() == true ? Color.red : new Color(0,0,173) ):
 	    (showHidden ? Color.darkGray : Color.white) ;
 
-
-	priLbl.setForeground( lblColor );
+	//priLbl.setForeground( lblColor );
 	//priLbl.setBackground( proc.isActive() ? Color.red : Color.white );
-
+	
+	//memLbl.setForeground(lblColor);
+	
+	compLbl.setForeground(lblColor);
 
 	if( proc.isArrived() ){
 	    g.setColor(initBurstColor);

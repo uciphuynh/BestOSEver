@@ -221,6 +221,11 @@ public class Process{
     	//System.out.println("arrival: " + getArrivalTime() + ", wait: " + wait);
     	return wait;}
     
+    public long getMemUse()
+    {
+    	return memoryNeeded;
+    }
+    
     
     /**
      * Get the value of finish.

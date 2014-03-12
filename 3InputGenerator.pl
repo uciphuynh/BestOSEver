@@ -102,7 +102,7 @@ sub buildFile
             
         }while($validPriority == 0);
         
-        print File ("$entryTime $burstTime $priority");
+        print File ("$burstTime $entryTime $priority");
         #print "$entryTime $burstTime $priority\n";
     }
     

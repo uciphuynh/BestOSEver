@@ -87,7 +87,9 @@ public class CPUSchedulerFrame extends JFrame implements ActionListener {
 	
 	// setup frame
 	setTitle("CPU Scheduler Simulation");
-	setSize(790,390);
+	//original 790 by 390 but need to fit the memory box without having to drag the
+	//screen each time
+	setSize(990,390);
 	setIconImage(Toolkit.getDefaultToolkit().getImage("com/jimweller/cpuscheduler/pics/cpu.jpg"));
 	
 	getAlgorithms(); //must do first before buildMenus()
@@ -130,6 +132,7 @@ public class CPUSchedulerFrame extends JFrame implements ActionListener {
 	bottomRow.add(quantumField);
 	bottomRow.add(new JLabel("Max Memory"));
 	bottomRow.add(memoryField);
+	cpu.setMaxMemory(Integer.parseInt(memoryField.getText()));
 
 	masterPanel.add(topRow);
 	masterPanel.add(middleRow);
