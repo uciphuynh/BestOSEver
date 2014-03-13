@@ -31,8 +31,6 @@ implements OptionallyPreemptiveSchedulingAlgorithm
 	
 	//since max burst time is 99, 100 is infinite
 	private final int INFINITE_QUANTUM = 100;
-	
-	private int currentlyRunningQueue = 3;
 	private long quantumStart;
 	
 	
@@ -66,16 +64,19 @@ implements OptionallyPreemptiveSchedulingAlgorithm
 			if(p.priority < QUEUE2_HIGHEST_PRIORITY)
 			{
 				queue.add(p);
+				//System.out.println("Process added to queue1");
 			}
 			else
 			{
 				//add to queue2
 				queue2.add(p);
+				//System.out.println("Process added to queue2");
 			}
 		}
 		else
 		{
 			queue3.add(p);
+			//System.out.println("Process added to queue3");
 		}
 		
 	}
@@ -83,7 +84,6 @@ implements OptionallyPreemptiveSchedulingAlgorithm
 	@Override
 	public boolean removeJob(Process p) {
 		// TODO Auto-generated method stub
-		
 		
 		//check if p is done and remove p from its respective queue
 		if(p.getPriorityWeight() < QUEUE2_HIGHEST_PRIORITY)
@@ -108,11 +108,13 @@ implements OptionallyPreemptiveSchedulingAlgorithm
 		for(int i = 0; i < queue.size();i++)
 		{
 			otherAlg.addJob(queue.get(i));
+		
 		}
 		
 		for(int j = 0; j < queue2.size(); j++)
 		{
 			otherAlg.addJob(queue2.get(j));
+			
 		}
 		
 		for(int k = 0; k < queue3.size(); k++)
@@ -126,47 +128,86 @@ implements OptionallyPreemptiveSchedulingAlgorithm
 	public Process getNextJob(long currentTime) {
 		// TODO Auto-generated method stub
 		
-		//if I can't interrupt, I need to look to see if the quantum is fulfilled
-		if(activeJob != null && !canInterrupt)
+		//if all the queues are empty, return null
+		if(queue.size() == 0 && queue2.size() == 0 && queue3.size() == 0)
 		{
-			
-			//check if the quantum time is done
-			long psuedoQuant = currentTime - quantumStart;
-			
-			if(currentlyRunningQueue == 1 && (psuedoQuant < quantum))
-			{
-				return activeJob;
-			}
-			else if(currentlyRunningQueue == 2 && (psuedoQuant < 2*quantum))
-			{
-				return activeJob;
-			}
-			else if((currentlyRunningQueue == 3 && psuedoQuant < INFINITE_QUANTUM))
-			{
-				return activeJob;
-			}
+			return null;
 		}
-		else if(queue.size() > 0)
+		
+		long pseudoTime = currentTime - quantumStart;
+		//check which one is currently running process
+		if(queue.size() != 0 && queue.get(0).isActive())
 		{
-			//return queue 1 job and set method to queue1
-			quantumStart = currentTime;
-			currentlyRunningQueue = 1;
-			return queue.get(0);
+			//since normal round robin is the parent class might as well
+			//save typing 3 lines...
+			//System.out.println("running queue1");
+			return super.getNextJob(currentTime);
 		}
-		else if(queue2.size() > 0)
+		else if(queue2.size() != 0 && queue2.get(0).isActive())
 		{
-			quantumStart = currentTime;
-			currentlyRunningQueue = 2;
+			//System.out.println("Pseudo time is: " + pseudoTime);
+			if(queue.size() != 0 && canInterrupt)
+			{
+				//System.out.println("Queue2 interrupted to run queue1");
+				quantumStart = currentTime;
+				return queue.get(0);
+			}
+			else if(pseudoTime >= 2*quantum || queue2.get(0).isFinished())
+			{
+				//System.out.println("Changing head");
+				Process origHead = queue2.pop();
+				queue2.add(origHead);
+				quantumStart = currentTime;
+				if(queue.size() != 0)
+				{
+					//System.out.println("Running queue1 after queue2");
+					return queue.get(0);
+				}
+			}
+			//System.out.println("Running queue2");
 			return queue2.get(0);
+		}
+		else if(queue3.size() != 0 && queue3.get(0).isActive())
+		{
+			if(queue2.size() != 0 || queue.size() != 0)
+			{
+				if(canInterrupt)
+				{
+					quantumStart = currentTime;
+					if(queue.size() != 0)
+					{
+						//System.out.println("Running queue1 after interrupting queue3");
+						return queue.get(0);
+					}
+					else
+					{
+						//System.out.println("Running queue2 after interrupting queue2");
+						return queue2.get(0);
+					}
+				}
+			}
+			//System.out.println("running queue3");
+			return queue3.get(0);
 		}
 		else
 		{
+			//System.out.println("Finding next process after idling");
 			quantumStart = currentTime;
-			currentlyRunningQueue = 3;
-			return queue3.get(0);
+			//none of the queues have an active process but there is a queue that is non empty
+			//find out which queue is non empty and return that process
+			if(queue.size()!= 0)
+			{
+				return queue.get(0);
+			}
+			else if (queue2.size() != 0)
+			{
+				return queue2.get(0);
+			}
+			else
+			{
+				return queue3.get(0);
+			}
 		}
-		
-		return null;
 		
 	}
 

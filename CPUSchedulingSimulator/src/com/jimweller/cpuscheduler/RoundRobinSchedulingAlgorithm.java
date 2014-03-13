@@ -77,10 +77,10 @@ public class RoundRobinSchedulingAlgorithm extends BaseSchedulingAlgorithm {
      */
     public Process getNextJob(long currentTime) 
     {	
-    	System.out.println("Get next job called!");
+    	//System.out.println("Get next job called!");
     	if(queue.isEmpty())
     	{
-    		System.out.println("D");
+    		//System.out.println("D");
     		return null;
     	}
     	else if((currentTime - quantumStart >= quantum) || queue.get(0).isFinished() )

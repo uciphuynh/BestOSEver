@@ -505,9 +505,9 @@ public class CPUSchedulerFrame extends JFrame implements ActionListener {
 			 cpu.getMeanTurn(),
 			 cpu.getMaxTurn(),
 			 cpu.getStdDevTurn());
-	memorySP.setStats(cpu.getMaxMemory(), 
-			cpu.getMemoryAllocated(),
+	memorySP.setStats(cpu.getMaxMemory(),
 			cpu.getAmountOfFreeMemory(),
+			cpu.getMemoryAllocated(),
 			cpu.numberOfSuspendedProcesses());
     }   
 
