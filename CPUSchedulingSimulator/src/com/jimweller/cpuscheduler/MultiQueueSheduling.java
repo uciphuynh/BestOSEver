@@ -19,7 +19,8 @@ implements OptionallyPreemptiveSchedulingAlgorithm
 	
 	//if canInterrupt is true, algorithm can be preemptive in that the moment a higher
 	//level queue receives a process, lower level queue processes are put on hold
-	private boolean canInterrupt;
+	//initialized to false
+	private boolean canInterrupt = false;
 	
 	//private LinkedList<Process> queue1; //round robin with quantum (already provided with parent class)
 	//so queue1 = queue.
@@ -205,6 +206,8 @@ implements OptionallyPreemptiveSchedulingAlgorithm
 			}
 			else
 			{
+				//just keep returning the head of queue3 till its done executing
+				//(in which it is auto cleaned up by CPU scheduler)
 				return queue3.get(0);
 			}
 		}
