@@ -67,29 +67,32 @@ public class VarietyMultiSchedulingAlgorithm extends RoundRobinSchedulingAlgorit
 		queue2Alg = algorithmList.get(QUEUE_2_ALG);
 		queue3Alg = algorithmList.get(QUEUE_3_ALG);
 		
+
+	}
+	
+	public void setQuantum(int v)
+	{
+		super.setQuantum(v);
+		
 		//ignore the yellow since we're changing the constants to switch between modified
 		//algorithms...
 		if(QUEUE_1_ALG == 5)
 		{
-			RoundRobinSchedulingAlgorithm RR = (RoundRobinSchedulingAlgorithm) queue1Alg;
-			RR.setQuantum(QUEUE_1_QUANTUM_MULT * quantum);
-			queue1Alg = RR;
+			((RoundRobinSchedulingAlgorithm) queue1Alg).setQuantum(QUEUE_1_QUANTUM_MULT * v);
 		}
 		
 		if(QUEUE_2_ALG == 5)
 		{
-			RoundRobinSchedulingAlgorithm RR2 = (RoundRobinSchedulingAlgorithm) queue2Alg;
-			RR2.setQuantum(QUEUE_2_QUANTUM_MULT * quantum);
-			queue2Alg = RR2;
+			((RoundRobinSchedulingAlgorithm) queue2Alg).setQuantum(QUEUE_2_QUANTUM_MULT * v);
+			System.out.println("queue 2's quantum: " + ((RoundRobinSchedulingAlgorithm) queue2Alg).getQuantum());
 		}
 		
 		if(QUEUE_3_ALG == 5)
 		{
-			RoundRobinSchedulingAlgorithm RR3 = (RoundRobinSchedulingAlgorithm) queue3Alg;
-			RR3.setQuantum(QUEUE_3_QUANTUM_MULT * quantum);
-			queue3Alg = RR3;
+			((RoundRobinSchedulingAlgorithm) queue3Alg).setQuantum(QUEUE_3_QUANTUM_MULT * v);
 		}
 	}
+	
 
 	@Override
 	public boolean isPreemptive() {
@@ -108,20 +111,20 @@ public class VarietyMultiSchedulingAlgorithm extends RoundRobinSchedulingAlgorit
 	public void addJob(Process p) {
 		// TODO Auto-generated method stub
 		
-		if(p.getPriorityWeight() < QUEUE2_HIGHEST_PRIORITY)
+		if(p.getPriorityWeight() < QUEUE3_HIGHEST_PRIORITY)
 		{
-			queue1Alg.addJob(p);
-		}
-		else
-		{
-			if(p.getPriorityWeight() < QUEUE3_HIGHEST_PRIORITY)
+			if(p.getPriorityWeight() < QUEUE2_HIGHEST_PRIORITY)
 			{
-				queue2Alg.addJob(p);
+				queue1Alg.addJob(p);
 			}
 			else
 			{
-				queue3Alg.addJob(p);
+				queue2Alg.addJob(p);
 			}
+		}
+		else
+		{
+			queue3Alg.addJob(p);
 		}
 		
 	}
@@ -159,9 +162,66 @@ public class VarietyMultiSchedulingAlgorithm extends RoundRobinSchedulingAlgorit
 	public Process getNextJob(long currentTime) {
 		// TODO Auto-generated method stub
 		
-		//this one is going to be complicated
+		//fetch all the possible next jobs
+		Process p1 = queue1Alg.getNextJob(currentTime);
+		Process p2 = queue2Alg.getNextJob(currentTime);
+		Process p3 = queue3Alg.getNextJob(currentTime);
 		
-		return null;
+		if(p1 == null && p2 == null && p3 == null)
+		{
+			return null;
+		}
+		else
+		{
+			//one of them is not null
+			//find out which one is active and base decisions off of that
+			if(p1 != null && p1.isActive())
+			{
+				return p1;
+			}
+			else if(p2 != null && p2.isActive())
+			{
+				if(canInterrupt && p1 != null)
+				{
+					return p1;
+				}
+				
+				return p2;
+			}
+			else if(p3 != null && p3.isActive())
+			{
+				//p3 is not null and is active
+				if(canInterrupt)
+				{
+					if(p1 != null)
+					{
+						return p1;
+					}
+					else if(p2 != null)
+					{
+						return p2;
+					}
+					
+				}
+				return p3;
+			}
+			else
+			{
+				//none are active... so find the one that's not null
+				if(p1 != null)
+				{
+					return p1;
+				}
+				else if(p2 != null)
+				{
+					return p2;
+				}
+				else
+				{
+					return p3;
+				}
+			}
+		}
 	}
 
 	@Override
