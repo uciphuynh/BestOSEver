@@ -84,7 +84,7 @@ public class VarietyMultiSchedulingAlgorithm extends RoundRobinSchedulingAlgorit
 		if(QUEUE_2_ALG == 5)
 		{
 			((RoundRobinSchedulingAlgorithm) queue2Alg).setQuantum(QUEUE_2_QUANTUM_MULT * v);
-			System.out.println("queue 2's quantum: " + ((RoundRobinSchedulingAlgorithm) queue2Alg).getQuantum());
+			//System.out.println("queue 2's quantum: " + ((RoundRobinSchedulingAlgorithm) queue2Alg).getQuantum());
 		}
 		
 		if(QUEUE_3_ALG == 5)
