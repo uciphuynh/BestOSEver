@@ -12,7 +12,7 @@ package com.jimweller.cpuscheduler;
 
 import java.util.LinkedList;
 
-public class MultiQueueSheduling extends RoundRobinSchedulingAlgorithm
+public class MultiQueueScheduling extends RoundRobinSchedulingAlgorithm
 implements OptionallyPreemptiveSchedulingAlgorithm
 {
 	//private int quantum (get quantum and set quantum already here)
@@ -35,7 +35,7 @@ implements OptionallyPreemptiveSchedulingAlgorithm
 	private long quantumStart;
 	
 	
-	public MultiQueueSheduling()
+	public MultiQueueScheduling()
 	{
 		super();
 		queue2 = new LinkedList<Process>();

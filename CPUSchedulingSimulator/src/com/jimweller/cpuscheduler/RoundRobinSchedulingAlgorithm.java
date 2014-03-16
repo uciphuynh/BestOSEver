@@ -28,7 +28,6 @@ public class RoundRobinSchedulingAlgorithm extends BaseSchedulingAlgorithm {
     /** Add the new job to the correct queue. */
     public void addJob(Process p) 
     {
-    	//System.out.println("added a job");
     	//queue adds P to the back of the queue
     	queue.add(p);
     }
@@ -77,10 +76,8 @@ public class RoundRobinSchedulingAlgorithm extends BaseSchedulingAlgorithm {
      */
     public Process getNextJob(long currentTime) 
     {	
-    	//System.out.println("Get next job called!");
     	if(queue.isEmpty())
     	{
-    		//System.out.println("D");
     		return null;
     	}
     	else if((currentTime - quantumStart >= quantum) || queue.get(0).isFinished() )
@@ -88,16 +85,11 @@ public class RoundRobinSchedulingAlgorithm extends BaseSchedulingAlgorithm {
     		//if there is a current process running
     		//if quantum time is up or finished, call next job
     		//if not, return currently running process
-    		//long timeElapsed = currentTime - quantumStart;
-    		//System.out.println("Time Elapsed: " + timeElapsed);
 	    	Process origRunning = queue.pop();
 	    	//moved the process to the back of the queue
 	    	queue.add(origRunning);
-	    	quantumStart = currentTime;
-	    	
+	    	quantumStart = currentTime;    	
     	}
-    	
-    	//System.out.println("just returned head");
     	return queue.get(0);
     }
 
