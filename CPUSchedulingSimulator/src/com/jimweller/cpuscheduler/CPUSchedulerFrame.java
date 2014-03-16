@@ -338,15 +338,17 @@ public class CPUSchedulerFrame extends JFrame implements ActionListener {
 			openFileDialog.getSelectedFile().getName();
 		    int fnLen = fileName.length();
 		    if( !((fileName.substring(fnLen-4)).equals(".csv")))
-			fileName += ".csv";
+		    fileName += ".csv";
 		    System.out.println(fileName);
+		    //keeps throwing exception on creating a file so going to print to console
+		    cpu.printCSV();
 		    File file= new File( fileName );
 		    PrintWriter ostream = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 		    cpu.printCSV(ostream);
 		    ostream.flush();
 		    ostream.close();
 		}
-		catch(IOException saveIOE){ }
+		catch(IOException saveIOE){ System.out.println("Exception thrown");}
 	    } 
 	    
 	}

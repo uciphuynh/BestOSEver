@@ -90,7 +90,7 @@ sub buildFile
         {
             $burstTime = ceil($burstTimeGenerator->next());
             
-            if($burstTime >= 0 && $burstTime <= 100)
+            if($burstTime > 0 && $burstTime <= 100)
             {
                 $validBurst = 1;
             }
@@ -108,17 +108,26 @@ sub buildFile
             
         }while($validPriority == 0);
         
-        #memory cannot be less than 0 but can be over the max?
-        $validMemAmount = 0;
-        do
+        #memory cannot be less than 0 but cannot be over the max
+        # just to avoid suspension from happening in our stats when running those that don't
+        #involve the memory constraint, if I say muM is 0, all memory fields are 0
+        if($muM == 0)
         {
-            $memory = ceil($memoryNeedGenerator->next());
-            if($memory >= 0)
+            $memory = 0;
+        }
+        else
+        {
+            $validMemAmount = 0;
+            do
             {
-                $validMemAmount = 1;
-            }
-        
-        }while($validMemAmount == 0);
+                $memory = ceil($memoryNeedGenerator->next());
+                if($memory >= 0)
+                {
+                    $validMemAmount = 1;
+                }
+            
+            }while($validMemAmount == 0);
+        }
         
         print File ("$burstTime $entryTime $priority $memory");
         #print "$burstTime $delayTime $priority\n";
