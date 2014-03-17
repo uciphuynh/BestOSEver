@@ -28,9 +28,9 @@ public class VarietyMultiSchedulingAlgorithm extends RoundRobinSchedulingAlgorit
 	 * 4 Priority (preemptive)
 	 * 5 RR*/
 	
-	private final int QUEUE_1_ALG = 1;
-	private final int QUEUE_2_ALG = 3;
-	private final int QUEUE_3_ALG = 0;
+	private final int QUEUE_1_ALG = 5;
+	private final int QUEUE_2_ALG = 1;
+	private final int QUEUE_3_ALG = 2;
 	
 	//all of the possible scheduling algorithm types are stored in this list
 	//above ints represent the position in the arraylist below that the algorithm
