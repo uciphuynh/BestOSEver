@@ -1,5 +1,8 @@
 package com.jimweller.cpuscheduler;
 
+/* @author: Group 32: Shannon Lewis, Zach Soohoo, Phong Huynh, Rachel Chu
+* Winter 2014*/
+
 import java.util.ArrayList;
 
 //in the documentation for the write up we use a variety of algorithms for each queue

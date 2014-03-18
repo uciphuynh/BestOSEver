@@ -27,6 +27,9 @@ import org.reflections.*;
  * load random and predetermined data sets, run simulations from a GUI and watch an animation
  * of the process thanks to to a time signal responded to using the ActionListener interface.
  */
+
+/* @author: Group 32: Shannon Lewis, Zach Soohoo, Phong Huynh, Rachel Chu
+* Winter 2014*/
 public class CPUSchedulerFrame extends JFrame implements ActionListener {
 
     

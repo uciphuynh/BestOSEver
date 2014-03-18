@@ -14,6 +14,11 @@ import java.awt.geom.*;
  * cpu burst and it's remaining burst times. The priority at the bottom shows the 
  * weight a process is given in some scheduling algorithms
  */
+
+//modified by:
+/* @author: Group 32: Shannon Lewis, Zach Soohoo, Phong Huynh, Rachel Chu
+* Winter 2014*/
+
 class ProcessPanel extends JPanel{
 
     /** The process this panel sharkfishes from */

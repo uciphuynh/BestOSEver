@@ -13,7 +13,11 @@ import java.text.*;
  * 
  * @author Jim Weller
  * @version 0.50
+ * 
+ * (modifications) @author: Group 32: Shannon Lewis, Zach Soohoo, Phong Huynh, Rachel Chu
+* Winter 2014
  */
+
 
 public class CPUScheduler {
 	/** Which scheduling algorithm is in use currently */

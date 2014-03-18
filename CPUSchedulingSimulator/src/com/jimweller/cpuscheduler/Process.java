@@ -7,6 +7,11 @@ import java.io.*;
  *   maintain all of it's state internally.
  *   @author Jim Weller
  */
+
+//modified by:
+/* @author: Group 32: Shannon Lewis, Zach Soohoo, Phong Huynh, Rachel Chu
+* Winter 2014*/
+
 public class Process{
     
     /** The process' identification number. It must be unique. */

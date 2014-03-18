@@ -5,12 +5,13 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.text.*;
 
+/* @author: Group 32: Shannon Lewis, Zach Soohoo, Phong Huynh, Rachel Chu
+* Winter 2014*/
+
 // creating a special panel to display memory stats
 // copy and pasted the stats panel code and now modifying it to reflect what I
 // actually want from the memory panel
-/**
- * A simple panel for showing min/mean/max for any quantifier.
- */
+
 class MemoryPanel extends JPanel{
 
     final static int width=170,height=80;
